@@ -1,9 +1,10 @@
 """The module defines the ContactList class.
 
-This window allows users to add contacts using a simple table.
+This window allows users to add and remove contacts using a simple table.
 
 Step 1: UI scaffold is provided in __initialize_widgets() (DO NOT EDIT).
 Step 2: Add Contact event handling (signal/slot) is implemented.
+Step 4: Remove Contact event handling (signal/slot + confirmation) is implemented.
 """
 
 __author__ = "ACE Faculty"
@@ -19,6 +20,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QTableWidgetItem,
+    QMessageBox,
 )
 from PySide6.QtCore import Slot
 
@@ -27,8 +29,10 @@ class ContactList(QMainWindow):
     """
     Provides a UI to manage contacts.
 
+    Notes on steps:
       - Step 1: The given UI is created in __initialize_widgets() (DO NOT EDIT).
       - Step 2: The Add Contact Slot is implemented and wired to the Add button.
+      - Step 4: The Remove Contact Slot is implemented and wired to the Remove button.
     """
 
     def __init__(self):
@@ -38,6 +42,9 @@ class ContactList(QMainWindow):
 
         # Step 2: Connect the Add button's clicked signal to the private Slot.
         self.add_button.clicked.connect(self.__on_add_contact)
+
+        # Step 4: Connect the Remove button's clicked signal to the private Slot.
+        self.remove_button.clicked.connect(self.__on_remove_contact)
 
     def __initialize_widgets(self):
         """Initializes the widgets on this Window.
@@ -102,3 +109,37 @@ class ContactList(QMainWindow):
             self.status_label.setText(f"Added contact: {name}")
         else:
             self.status_label.setText("Please enter a contact name and phone number.")
+
+    # -----------------------------
+    # Step 4: Remove Contact (private Slot)
+    # -----------------------------
+    @Slot()
+    def __on_remove_contact(self):
+        """
+        Step 4: Removes the currently selected contact (after confirmation).
+
+        Behavior:
+          - Determine the selected row using currentRow().
+          - If no row selected:
+                status_label -> "Please select a row to be removed."
+          - If a row is selected:
+                Show a confirmation dialog (Yes/No).
+                On Yes -> removeRow(selected_row)
+                          status_label -> "Contact removed."
+        """
+        row = self.contact_table.currentRow()
+
+        if row >= 0:
+            reply = QMessageBox.question(
+                self,
+                "Remove Contact",
+                "Are you sure you want to remove the selected contact?",
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No
+            )
+            if reply == QMessageBox.Yes:
+                self.contact_table.removeRow(row)
+                self.status_label.setText("Contact removed.")
+            # If No: no change to table or status (per activity).
+        else:
+            self.status_label.setText("Please select a row to be removed.")
