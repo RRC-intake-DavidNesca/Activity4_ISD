@@ -28,8 +28,6 @@ from PySide6.QtCore import Slot
 
 class ContactList(QMainWindow):
     """
-    Provides a UI to manage contacts.
-
     Notes on steps:
       - Step 1: UI is created in __initialize_widgets() (DO NOT EDIT).
       - Step 2: Private Slot for Add wired to add_button.
@@ -43,8 +41,7 @@ class ContactList(QMainWindow):
         Wires signals to private Slots:
             - Step 2: add_button.clicked -> __on_add_contact
             - Step 4: remove_button.clicked -> __on_remove_contact
-        Returns:
-            None
+        Returns: None
         """
         super().__init__()
         self.__initialize_widgets()
