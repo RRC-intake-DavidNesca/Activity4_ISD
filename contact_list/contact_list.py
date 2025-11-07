@@ -9,9 +9,8 @@ Activity 4 - Part 1 (Contact List):
 This window allows users to add and remove contacts using a simple table.
 """
 
-__author__ = "ACE Faculty"
-__version__ = "1.0.0"
-__credits__ = ""
+__author__ = "David Nesca"
+__version__ = "1"
 
 from PySide6.QtWidgets import (
     QMainWindow,

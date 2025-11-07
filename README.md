@@ -10,4 +10,3 @@ This activity will help to reinforce learning of the Module 4 concepts of:
 ## Author
 
 David Nesca
-
