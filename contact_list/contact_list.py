@@ -1,14 +1,12 @@
 """The module defines the ContactList class.
 
-This window allows users to add and remove contacts using a simple table.
+Activity 4 - Part 1 (Contact List):
+- Step 1: UI scaffold created in __initialize_widgets() (DO NOT EDIT).
+- Step 2: Add Contact event handling (private Slot) and signal wiring.
+- Step 4: Remove Contact event handling (private Slot) with confirmation.
+- Step 5: Edits after testing
 
-Step 1: UI scaffold is provided in __initialize_widgets() (DO NOT EDIT).
-Step 2: Add Contact event handling (signal/slot) is implemented.
-Step 4: Remove Contact event handling (signal/slot + confirmation) is implemented.
-Step 5: Test-step fixes:
-        - Show a status message when user clicks 'No' in the confirm dialog.
-        - Treat 'no selection' correctly by requiring an explicit selection.
-        - Clear selection after Add so the 'no selection' test is meaningful.
+This window allows users to add and remove contacts using a simple table.
 """
 
 __author__ = "ACE Faculty"
@@ -37,11 +35,18 @@ class ContactList(QMainWindow):
       - Step 1: UI is created in __initialize_widgets() (DO NOT EDIT).
       - Step 2: Private Slot for Add wired to add_button.
       - Step 4: Private Slot for Remove wired to remove_button.
-      - Step 5: Cancel confirmation and explicit-selection behavior.
+      - Step 5: Cancel confirmation + explicit-selection handling.
     """
 
     def __init__(self):
-        """Initializes a new instance of the ContactList class."""
+        """Initializes a new instance of the ContactList class.
+
+        Wires signals to private Slots:
+            - Step 2: add_button.clicked -> __on_add_contact
+            - Step 4: remove_button.clicked -> __on_remove_contact
+        Returns:
+            None
+        """
         super().__init__()
         self.__initialize_widgets()
 
@@ -54,8 +59,9 @@ class ContactList(QMainWindow):
     def __initialize_widgets(self):
         """Initializes the widgets on this Window.
 
-        Step 1: This method is provided by the activity as the starting UI layout.
-                It should not be modified.
+        Step 1 (given layout – do not edit).
+        Returns:
+            None
         """
         self.setWindowTitle("Contact List")
 
@@ -91,13 +97,17 @@ class ContactList(QMainWindow):
     # -----------------------------
     @Slot()
     def __on_add_contact(self):
-        """
-        Adds a contact to the table if both inputs contain text.
-        Otherwise, displays the required message in the status label.
+        """Step 2: Private slot for Add Contact.
 
-        Messages:
-            - Success: "Added contact: {name}"
-            - Missing input: "Please enter a contact name and phone number."
+        Reads inputs from QLineEdit widgets, trims whitespace, and:
+          - If both fields have data:
+                * append a row to the table (Name, Phone)
+                * update status -> "Added contact: {name}"
+                * clear any selection so a subsequent Remove requires selection
+          - Else:
+                * update status -> "Please enter a contact name and phone number."
+        Returns:
+            None
         """
         name = self.contact_name_input.text().strip()
         phone = self.phone_input.text().strip()
@@ -113,7 +123,7 @@ class ContactList(QMainWindow):
             # Update the status label (exact wording per Activity).
             self.status_label.setText(f"Added contact: {name}")
 
-            # Ensure nothing appears selected by default.
+            # Step 5: ensure nothing appears selected by default.
             self.contact_table.clearSelection()
         else:
             self.status_label.setText("Please enter a contact name and phone number.")
@@ -123,20 +133,21 @@ class ContactList(QMainWindow):
     # -----------------------------
     @Slot()
     def __on_remove_contact(self):
-        """
-        Removes the user-selected row after confirmation.
+        """Step 4/5: Private slot for Remove Contact with confirmation.
 
-        Behaviour (per Activity Step 4/5):
-            - If a row is explicitly selected:
-                * Ask: "Are you sure you want to remove the selected contact?"
-                * On Yes: remove the row and set status -> "Contact removed."
-                * On No:  set status -> "Removal canceled."
-            - If no row selected:
-                * Set status -> "Please select a row to be removed."
+        Behavior:
+          - Require an explicit selection (selectedItems() must be non-empty).
+          - If no selection -> status: "Please select a row to be removed."
+          - If selected:
+                * QMessageBox.question "Remove Contact" (Yes/No, default No)
+                * On Yes -> remove row; status: "Contact removed."
+                * On No  -> status: "Removal canceled."
+        Returns:
+            None
         """
         row = self.contact_table.currentRow()
 
-        # Step 5: Require an explicit selection (protects against implicit 'current row').
+        # Explicit selection guards against a hidden "current" row still set by Qt
         has_explicit_selection = len(self.contact_table.selectedItems()) > 0
         if row < 0 or not has_explicit_selection:
             self.status_label.setText("Please select a row to be removed.")
@@ -154,5 +165,4 @@ class ContactList(QMainWindow):
             self.contact_table.removeRow(row)
             self.status_label.setText("Contact removed.")
         else:
-            # Step 5: explicit confirmation when the user cancels.
             self.status_label.setText("Removal canceled.")
