@@ -1,6 +1,9 @@
 """The module defines the ContactList class.
 
 This window allows users to add contacts using a simple table.
+
+Step 1: UI scaffold is provided in __initialize_widgets() (DO NOT EDIT).
+Step 2: Add Contact event handling (signal/slot) is implemented.
 """
 
 __author__ = "ACE Faculty"
@@ -23,7 +26,9 @@ from PySide6.QtCore import Slot
 class ContactList(QMainWindow):
     """
     Provides a UI to manage contacts.
-    Step 2: Implement the Add Contact Slot and connect the Add button.
+
+      - Step 1: The given UI is created in __initialize_widgets() (DO NOT EDIT).
+      - Step 2: The Add Contact Slot is implemented and wired to the Add button.
     """
 
     def __init__(self):
@@ -31,13 +36,14 @@ class ContactList(QMainWindow):
         super().__init__()
         self.__initialize_widgets()
 
-        # Activity Step 2: connect the Add button (signal) to the private Slot.
+        # Step 2: Connect the Add button's clicked signal to the private Slot.
         self.add_button.clicked.connect(self.__on_add_contact)
 
     def __initialize_widgets(self):
         """Initializes the widgets on this Window.
 
-        DO NOT EDIT (given design).
+        Step 1: This method is provided by the activity as the starting UI layout.
+                 It should not be modified.
         """
         self.setWindowTitle("Contact List")
 
