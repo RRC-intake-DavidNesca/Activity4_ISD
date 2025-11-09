@@ -46,10 +46,9 @@ class ContactList(QMainWindow):
         super().__init__()
         self.__initialize_widgets()
 
-        # Step 2: Connect the Add button's clicked signal to the private Slot.
+
         self.add_button.clicked.connect(self.__on_add_contact)
 
-        # Step 4: Connect the Remove button's clicked signal to the private Slot.
         self.remove_button.clicked.connect(self.__on_remove_contact)
 
     def __initialize_widgets(self):
@@ -88,9 +87,6 @@ class ContactList(QMainWindow):
         container.setLayout(layout)
         self.setCentralWidget(container)
 
-    # -----------------------------
-    # Step 2: Add Contact (private Slot)
-    # -----------------------------
     @Slot()
     def __on_add_contact(self):
         """Step 2: Private slot for Add Contact.
@@ -116,7 +112,7 @@ class ContactList(QMainWindow):
             self.contact_table.setItem(row_position, 0, QTableWidgetItem(name))
             self.contact_table.setItem(row_position, 1, QTableWidgetItem(phone))
 
-            # Update the status label (exact wording per Activity).
+            # Update the status label 
             self.status_label.setText(f"Added contact: {name}")
 
             # Step 5: ensure nothing appears selected by default.
@@ -124,9 +120,6 @@ class ContactList(QMainWindow):
         else:
             self.status_label.setText("Please enter a contact name and phone number.")
 
-    # -----------------------------
-    # Step 4/5: Remove Contact (private Slot)
-    # -----------------------------
     @Slot()
     def __on_remove_contact(self):
         """Step 4/5: Private slot for Remove Contact with confirmation.
@@ -138,8 +131,6 @@ class ContactList(QMainWindow):
                 * QMessageBox.question "Remove Contact" (Yes/No, default No)
                 * On Yes -> remove row; status: "Contact removed."
                 * On No  -> status: "Removal canceled."
-        Returns:
-            None
         """
         row = self.contact_table.currentRow()
 
